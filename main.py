@@ -1,6 +1,6 @@
 from Game import Game
 from Agent import Agent
-from model import Connect4AI
+from model import SmartAgent
 
 
 
@@ -77,7 +77,7 @@ while True:
                     isBot = botChoice == '1'
                     break
                 print("Invalid Choice! Please Select 1 or 2.")
-            agents.append(Agent(username, color, isBot, model=Connect4AI(color)))
+            agents.append(Agent(username, color, isBot, model=SmartAgent(color)))
             print(f"\nAgent '{username}' Created Successfully!")
         case 2:
             printHeader("CREATE NEW GAME")

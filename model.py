@@ -1,5 +1,5 @@
 
-class Connect4AI:
+class SmartAgent:
     def __init__(self, playerColor):
         self.playerColor = playerColor
         self.playerNum = 2
