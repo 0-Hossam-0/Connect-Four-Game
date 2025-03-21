@@ -1,6 +1,7 @@
 from Agent import Agent
 import random
 
+
 class Game(Agent):
 
   def __init__(self, name):
@@ -305,7 +306,12 @@ class Game(Agent):
          index = 0
          continue
       index += 1
-  def startGameWithBot(self, agents: list[Agent]):
+  def getAiMove(self, agent, board):
+    numericBoard = agent.model._convertBoardToNumeric(board)
+    col, _ = agent.model.minimax(numericBoard, depth=5, alpha=-float('inf'),
+                               beta=float('inf'), maximizingPlayer=True)
+    return col + 1
+  def startGameWithBot(self, agents: list[Agent], difficulty : int):
      index = 0
      while self.isBoardAvailable:
         if index == len(agents):
@@ -313,8 +319,11 @@ class Game(Agent):
         print(agents[index].username, 'Turn')
         self._isFullBoard()
         if agents[index].isBot:
-          agentPlay = random.randint(0,6)
-          if not self.makeMove(agents[index], agentPlay):
+          if difficulty == 1:
+            move = self.getAiMove(agents[index], self.board)
+          else:
+            move = random.randint(0,6)
+          if not self.makeMove(agents[index], move):
             continue
           self.displayBoard()
           index += 1

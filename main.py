@@ -1,5 +1,6 @@
 from Game import Game
 from Agent import Agent
+from model import Connect4AI
 
 
 
@@ -76,7 +77,7 @@ while True:
                     isBot = botChoice == '1'
                     break
                 print("Invalid Choice! Please Select 1 or 2.")
-            agents.append(Agent(username, color, isBot))
+            agents.append(Agent(username, color, isBot, model=Connect4AI(color)))
             print(f"\nAgent '{username}' Created Successfully!")
         case 2:
             printHeader("CREATE NEW GAME")
@@ -85,7 +86,7 @@ while True:
                 print("Game name cannot be empty!")
                 continue
             games.append(Game(gameName))
-            print(f"\n✅ Game '{gameName}' created!")
+            print(f"\nGame '{gameName}' created!")
         case 3:
             if not games:
                 print("No games available! Create a game first.")
@@ -106,6 +107,11 @@ while True:
                 "[3] (Player Vs Player Vs ...)\n"
                 "Input => "
             )
+            difficulty = int(input(
+                "\t[1] Hard\n"
+                "\t[2] Easy\n"
+                "Input => "
+            ))
             if mode == '1':
                 if len(agents) < 2:
                     print("Need at least 2 agents to play!")
@@ -116,7 +122,7 @@ while True:
                     print("No Bots Available, Create Bot Agents First")
                     continue
                 currentGame.displayBoard()
-                currentGame.startGameWithBot([player] + bots[:3])
+                currentGame.startGameWithBot([player] + bots[:3], difficulty)
             elif mode == '2':
                 if len(agents) < 2:
                     print("Need At Least 2 Agents For Auto Play")
@@ -131,14 +137,14 @@ while True:
                 currentGame.displayBoard()
                 turn = 0
                 while currentGame.isBoardAvailable:
-                    current_agent = agents[turn % len(agents)]
+                    currentAgent = agents[turn % len(agents)]
                     try:
                         col = int(input(
-                            f"\n{current_agent.username}'s turn ({current_agent.color})\n"
+                            f"\n{currentAgent.username}'s turn ({currentAgent.color})\n"
                             "Enter column (1-7): "
                         ))
                         if 1 <= col <= 7:
-                            if currentGame.makeMove(current_agent, col):
+                            if currentGame.makeMove(currentAgent, col):
                                 currentGame.displayBoard()
                                 turn += 1
                             else:
